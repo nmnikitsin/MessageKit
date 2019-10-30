@@ -105,7 +105,13 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         isMessagesControllerBeingDismissed = false
     }
     
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addKeyboardObservers()
+    }
+    
     open override func viewWillDisappear(_ animated: Bool) {
+        removeKeyboardObservers()
         super.viewWillDisappear(animated)
         isMessagesControllerBeingDismissed = true
     }
@@ -119,7 +125,6 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         // Hack to prevent animation of the contentInset after viewDidAppear
         if isFirstLayout {
             defer { isFirstLayout = false }
-            addKeyboardObservers()
             messageCollectionViewBottomInset = requiredInitialScrollViewBottomInset()
         }
         adjustScrollViewTopInset()
@@ -135,7 +140,6 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     // MARK: - Initializers
 
     deinit {
-        removeKeyboardObservers()
         removeMenuControllerObservers()
         removeObservers()
         clearMemoryCache()
